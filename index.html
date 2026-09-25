@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1A1A2E">
+<meta name="description" content="ржмрж╛ржВрж▓рж╛ ржорж┐ржо-ржЗржорзЛржЬрж┐ ржХрзБржЗржЬ тАФ ржмржирзНржзрзБржжрзЗрж░ ржЪрзНржпрж╛рж▓рзЗржЮрзНржЬ ржХрж░рзБржи!">
+<title>ржЗржорзЛржЬрж┐ ржзрж╛ржБржзрж╛ ЁЯОп</title>
+<link rel="manifest" href="/manifest.json">
+<meta property="og:title" content="ржЗржорзЛржЬрж┐ ржзрж╛ржБржзрж╛ тАФ рждрзБржорж┐ ржХрждржЯрж╛ ржЪрж╛рж▓рж╛ржХ?">
+<meta property="og:description" content="ржмрж╛ржВрж▓рж╛ ржорж┐ржо-ржЗржорзЛржЬрж┐ ржХрзБржЗржЬ ржЦрзЗрж▓рзБржи ржПржмржВ ржмржирзНржзрзБржжрзЗрж░ ржЪрзНржпрж╛рж▓рзЗржЮрзНржЬ ржХрж░рзБржи!">
+<meta property="og:type" content="game">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{--primary:#FF6B6B;--secondary:#4ECDC4;--accent:#FFE66D;--bg:#1A1A2E;--bg2:#16213E;--card:#0F3460;--text:#fff;--success:#4CAF50;--danger:#E63946;--gold:#FFD700;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Hind Siliguri','Poppins',-apple-system,sans-serif;background:linear-gradient(135deg,var(--bg) 0%,var(--bg2) 100%);color:var(--text);display:flex;justify-content:center;align-items:flex-start;padding:10px;user-select:none;overflow-y:auto;}
+.screen{display:none;width:100%;max-width:480px;animation:fadeIn .35s ease;margin:auto;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-10px);}75%{transform:translateX(10px);}}
+@keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.15);}100%{transform:scale(1);}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(255,215,0,.5);}50%{box-shadow:0 0 40px rgba(255,215,0,.9);}}
+@keyframes spin{100%{transform:rotate(360deg);}}
+.logo{text-align:center;margin-bottom:18px;}
+.logo h1{font-size:40px;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--accent),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:float 3s ease-in-out infinite;}
+.logo p{color:#aaa;margin-top:6px;font-size:14px;}
+.emoji-row{font-size:34px;text-align:center;margin:12px 0;animation:float 2s ease-in-out infinite;}
+.btn{display:block;width:100%;padding:15px;margin:9px 0;border:none;border-radius:16px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;color:#fff;letter-spacing:.3px;}
+.btn:active{transform:scale(.96);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-primary{background:linear-gradient(135deg,var(--primary),#ee5a6f);box-shadow:0 6px 18px rgba(255,107,107,.4);}
+.btn-secondary{background:linear-gradient(135deg,var(--secondary),#38a89d);box-shadow:0 6px 18px rgba(78,205,196,.4);}
+.btn-gold{background:linear-gradient(135deg,#FFD700,#FFA500);color:#1A1A2E;box-shadow:0 6px 18px rgba(255,215,0,.4);}
+.btn-outline{background:transparent;border:2px solid rgba(255,255,255,.2);}
+.profile-card{background:rgba(255,255,255,.05);border-radius:20px;padding:18px;text-align:center;margin-bottom:18px;border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px);}
+.avatar{width:70px;height:70px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:32px;border:3px solid rgba(255,255,255,.2);overflow:hidden;}
+.avatar img{width:100%;height:100%;object-fit:cover;}
+.profile-name{font-size:19px;font-weight:700;}
+.profile-stat{color:#aaa;font-size:13px;margin-top:4px;}
+.edit-btn{background:none;border:none;color:var(--accent);font-family:inherit;font-size:13px;cursor:pointer;margin-top:6px;}
+.game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.lives{font-size:22px;letter-spacing:2px;}
+.lives .lost{filter:grayscale(1);opacity:.3;}
+.score-badge{background:linear-gradient(135deg,var(--accent),#ffb400);color:#1A1A2E;padding:6px 14px;border-radius:20px;font-weight:800;font-size:15px;}
+.q-counter{color:#aaa;font-size:13px;font-weight:600;}
+.progress-bar{height:6px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--secondary),var(--accent));width:0%;transition:width .3s;border-radius:10px;}
+.timer-bar{height:5px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden;margin-bottom:18px;}
+.timer-fill{height:100%;background:linear-gradient(90deg,var(--success),var(--accent),var(--danger));width:100%;transition:width .1s linear;border-radius:10px;}
+.timer-fill.warning{animation:pulse .5s infinite;}
+@keyframes pulse{50%{opacity:.4;}}
+.question-card{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border-radius:24px;padding:26px 18px;text-align:center;margin-bottom:18px;border:1px solid rgba(255,255,255,.1);min-height:150px;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+.emojis{font-size:52px;line-height:1.3;letter-spacing:6px;animation:pop .4s ease;word-break:break-word;}
+.question-category{color:var(--accent);font-size:12px;margin-top:14px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;}
+.options{display:grid;gap:11px;}
+.option-btn{padding:15px;border-radius:14px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:16px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;text-align:left;padding-left:18px;}
+.option-btn:active{transform:scale(.97);}
+.option-btn.correct{background:linear-gradient(135deg,var(--success),#388e3c);border-color:var(--success);animation:pop .3s;}
+.option-btn.wrong{background:linear-gradient(135deg,var(--danger),#b71c1c);border-color:var(--danger);animation:shake .3s;}
+.combo-badge{position:fixed;top:22%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--accent),#ff8c00);color:#1A1A2E;padding:9px 22px;border-radius:30px;font-weight:800;font-size:19px;z-index:100;animation:pop .5s;display:none;box-shadow:0 8px 20px rgba(0,0,0,.4);}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;justify-content:center;align-items:center;z-index:1000;padding:16px;backdrop-filter:blur(5px);overflow-y:auto;}
+.overlay.active{display:flex;animation:fadeIn .25s;}
+.popup{background:linear-gradient(135deg,var(--card),var(--bg2));border-radius:24px;padding:26px 22px;max-width:420px;width:100%;text-align:center;border:1px solid rgba(255,255,255,.15);animation:pop .35s ease;margin:auto;}
+.popup h2{font-size:22px;margin-bottom:8px;}
+.popup p{color:#aaa;margin-bottom:16px;font-size:14px;}
+.popup .big-score{font-size:44px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:8px 0;}
+.lb-header{text-align:center;margin-bottom:16px;}
+.lb-header h2{font-size:26px;}
+.lb-tabs{display:flex;gap:6px;margin-bottom:14px;}
+.lb-tab{flex:1;padding:9px;border-radius:12px;border:none;background:rgba(255,255,255,.08);color:#aaa;font-family:inherit;font-weight:600;cursor:pointer;font-size:13px;}
+.lb-tab.active{background:linear-gradient(135deg,var(--primary),#ee5a6f);color:#fff;}
+.lb-list{max-height:58vh;overflow-y:auto;padding-right:4px;}
+.lb-list::-webkit-scrollbar{width:4px;}
+.lb-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:4px;}
+.lb-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.05);border-radius:14px;margin-bottom:7px;border:1px solid rgba(255,255,255,.08);}
+.lb-item.top1{background:linear-gradient(135deg,rgba(255,215,0,.25),rgba(255,165,0,.15));border-color:var(--gold);animation:glow 2s infinite;}
+.lb-item.top2{background:linear-gradient(135deg,rgba(192,192,192,.2),rgba(128,128,128,.1));border-color:#C0C0C0;}
+.lb-item.top3{background:linear-gradient(135deg,rgba(205,127,50,.2),rgba(139,69,19,.1));border-color:#CD7F32;}
+.lb-rank{font-weight:800;font-size:16px;min-width:30px;text-align:center;}
+.lb-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;flex-shrink:0;overflow:hidden;}
+.lb-avatar img{width:100%;height:100%;object-fit:cover;}
+.lb-item.top1 .lb-avatar{border:2px solid var(--gold);}
+.lb-name{flex:1;font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lb-score{font-weight:800;color:var(--accent);font-size:15px;}
+.lb-me{border:2px dashed var(--accent) !important;}
+.loading{text-align:center;padding:30px;color:#aaa;}
+.spinner{width:36px;height:36px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
+.share-card{background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:20px;padding:22px;text-align:center;margin:14px 0;}
+.share-card .emoji{font-size:44px;}
+.share-card .txt{font-size:20px;font-weight:800;margin:6px 0;}
+.share-card .sub{opacity:.9;font-size:13px;}
+.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.share-btn{padding:13px;border-radius:12px;border:none;color:#fff;font-family:inherit;font-weight:600;cursor:pointer;font-size:14px;}
+.share-btn:active{transform:scale(.95);}
+.sb-fb{background:#1877F2;}
+.sb-wa{background:#25D366;}
+.sb-tg{background:#0088cc;}
+.sb-ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
+.sb-copy{background:rgba(255,255,255,.15);}
+.sb-native{background:linear-gradient(135deg,var(--accent),#ff8c00);color:#1A1A2E;grid-column:span 2;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(0,0,0,.92);color:#fff;padding:11px 22px;border-radius:30px;font-weight:600;transition:transform .3s;z-index:2000;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.5);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.ad-screen{background:#000;border-radius:20px;padding:24px 18px;text-align:center;border:2px solid var(--accent);}
+.ad-label{font-size:11px;color:#666;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;}
+.ad-content{background:linear-gradient(135deg,#2a2a3e,#1a1a2e);border-radius:14px;padding:32px 18px;margin-bottom:16px;}
+.ad-icon{font-size:58px;animation:float 2s infinite;}
+.ad-title{font-size:18px;font-weight:700;margin-top:10px;}
+.ad-sub{color:#aaa;font-size:13px;margin-top:6px;}
+.ad-timer{font-size:30px;font-weight:800;color:var(--accent);}
+.ad-skip{display:none;margin-top:12px;background:var(--success);color:#fff;border:none;padding:11px 26px;border-radius:30px;font-family:inherit;font-weight:700;cursor:pointer;font-size:15px;}
+.ad-skip.show{display:inline-block;}
+.challenge-banner{background:linear-gradient(135deg,var(--accent),#ff8c00);color:#1A1A2E;padding:14px;border-radius:14px;margin-bottom:14px;text-align:center;font-weight:700;font-size:15px;animation:pop .5s;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;}
+.stat-box{background:rgba(255,255,255,.06);padding:10px;border-radius:12px;text-align:center;}
+.stat-box .n{font-size:18px;font-weight:800;color:var(--accent);}
+.stat-box .l{font-size:11px;color:#aaa;margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="screen active" id="screen-home">
+  <div class="logo">
+    <div class="emoji-row">ЁЯРЯЁЯСС ЁЯППЁЯРп ЁЯОмЁЯОн</div>
+    <h1>ржЗржорзЛржЬрж┐ ржзрж╛ржБржзрж╛</h1>
+    <p>ЁЯОп рждрзБржорж┐ ржХрждржЯрж╛ ржЪрж╛рж▓рж╛ржХ? ржкрзНрж░ржорж╛ржг ржХрж░рзЛ!</p>
+  </div>
+  <div id="challengeBanner"></div>
+  <div class="profile-card">
+    <div class="avatar" id="homeAvatar">ЁЯШО</div>
+    <div class="profile-name" id="homeName">ржЦрзЗрж▓рзЛржпрж╝рж╛ржбрж╝</div>
+    <div class="profile-stat">рж╕рж░рзНржмрзЛржЪрзНржЪ рж╕рзНржХрзЛрж░: <span id="homeHighScore">рзж</span></div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="n" id="statTotal">рзж</div><div class="l">ржорзЛржЯ ржЦрзЗрж▓рж╛</div></div>
+      <div class="stat-box"><div class="n" id="statAvg">рзж</div><div class="l">ржПржнрж╛рж░рзЗржЬ</div></div>
+      <div class="stat-box"><div class="n" id="statBest">рзж</div><div class="l">рж╕рзЗрж░рж╛</div></div>
+    </div>
+    <button class="edit-btn" onclick="editProfile()">тЬПя╕П ржирж╛ржо/ржЕрзНржпрж╛ржнрж╛ржЯрж╛рж░ ржкрж░рж┐ржмрж░рзНрждржи</button>
+  </div>
+  <button class="btn btn-primary" onclick="startGame()">тЦ╢я╕П ржЦрзЗрж▓рж╛ рж╢рзБрж░рзБ ржХрж░рзБржи</button>
+  <button class="btn btn-secondary" onclick="showLeaderboard()">ЁЯПЖ ржЯржк рзирзж рж▓рж┐ржбрж╛рж░ржмрзЛрж░рзНржб</button>
+  <button class="btn btn-outline" onclick="showShare()">ЁЯУд ржмржирзНржзрзБржжрзЗрж░ ржЪрзНржпрж╛рж▓рзЗржЮрзНржЬ ржХрж░рзБржи</button>
+  <button class="btn btn-outline" onclick="showHowToPlay()">тЭУ ржХрзАржнрж╛ржмрзЗ ржЦрзЗрж▓ржмрзЗржи</button>
+</div>
+<div class="screen" id="screen-game">
+  <div class="game-header">
+    <div class="lives" id="livesDisplay">тЭдя╕ПтЭдя╕ПтЭдя╕П</div>
+    <div class="q-counter" id="qCounter">рзз/рззрзж</div>
+    <div class="score-badge">тнР <span id="currentScore">рзж</span></div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+  <div class="question-card">
+    <div class="emojis" id="emojiDisplay">ЁЯРЯЁЯСС</div>
+    <div class="question-category" id="categoryDisplay">рж╕рж┐ржирзЗржорж╛</div>
+  </div>
+  <div class="options" id="optionsContainer"></div>
+</div>
+<div class="combo-badge" id="comboBadge">ЁЯФе ржХржорзНржмрзЛ ├Чрзи</div>
+<div class="overlay" id="gameOverOverlay">
+  <div class="popup">
+    <div style="font-size:52px" id="gameOverEmoji">ЁЯШв</div>
+    <h2 id="gameOverTitle">рж▓рж╛ржЗржл рж╢рзЗрж╖!</h2>
+    <div class="big-score" id="finalScoreDisplay">рзж</div>
+    <p id="gameOverMsg">ржЪрж┐ржирзНрждрж╛ ржирзЗржЗ! ржЕрзНржпрж╛ржб ржжрзЗржЦрзЗ ржЖржмрж╛рж░ рж╢рзБрж░рзБ ржХрж░рзБржи</p>
+    <button class="btn btn-gold" onclick="watchAdForLives()">ЁЯУ║ ржЕрзНржпрж╛ржб ржжрзЗржЦрзЗ рзйржЯрж┐ рж▓рж╛ржЗржл ржирж┐ржи</button>
+    <button class="btn btn-secondary" onclick="showShareFromGame()">ЁЯУд ржмржирзНржзрзБржжрзЗрж░ ржЪрзНржпрж╛рж▓рзЗржЮрзНржЬ ржХрж░рзБржи</button>
+    <button class="btn btn-outline" onclick="showLeaderboard()">ЁЯПЖ рж▓рж┐ржбрж╛рж░ржмрзЛрж░рзНржб ржжрзЗржЦрзБржи</button>
+    <button class="btn btn-outline" onclick="showHome()">ЁЯПа рж╣рзЛржорзЗ ржлрж┐рж░рзБржи</button>
+  </div>
+</div>
+<div class="overlay" id="adOverlay">
+  <div class="popup">
+    <div class="ad-screen">
+      <div class="ad-label">ржмрж┐ржЬрзНржЮрж╛ржкржи</div>
+      <div class="ad-content">
+        <div class="ad-icon">ЁЯОо</div>
+        <div class="ad-title">ржЖржкржирж╛рж░ ржЧрзЗржо ржПржЦрж╛ржирзЗ!</div>
+        <div class="ad-sub">ржПржЯрж┐ ржбрзЗржорзЛ ржЕрзНржпрж╛ржбред ржЖрж╕рж▓ ржЕрзНржпрж╛ржбрзЗ Google AdSense ржмрж╕ржмрзЗред</div>
+      </div>
+      <div class="ad-timer" id="adTimer">рзл</div>
+      <p style="color:#666;font-size:12px;margin-top:8px">рж╕рзЗржХрзЗржирзНржб ржкрж░рзЗ рж▓рж╛ржЗржл ржкрж╛ржмрзЗржи</p>
+      <button class="ad-skip" id="adSkipBtn" onclick="finishAd()">тЬЕ рж▓рж╛ржЗржл ржирж┐ржи</button>
+    </div>
+  </div>
+</div>
+<div class="screen" id="screen-leaderboard">
+  <div class="lb-header">
+    <h2>ЁЯПЖ ржЯржк рзирзж</h2>
+    <p style="color:#aaa;font-size:13px;margin-top:4px">рж╕рзЗрж░рж╛ ржЦрзЗрж▓рзЛржпрж╝рж╛ржбрж╝ржжрзЗрж░ рждрж╛рж▓рж┐ржХрж╛</p>
+  </div>
+  <div class="lb-tabs">
+    <button class="lb-tab active" onclick="switchLbTab('all',event)">рж╕ржм рж╕ржоржпрж╝</button>
+    <button class="lb-tab" onclick="switchLbTab('week',event)">ржПржЗ рж╕ржкрзНрждрж╛рж╣</button>
+    <button class="lb-tab" onclick="switchLbTab('today',event)">ржЖржЬ</button>
+  </div>
+  <div class="lb-list" id="lbList"><div class="loading"><div class="spinner"></div>рж▓рзЛржб рж╣ржЪрзНржЫрзЗ...</div></div>
+  <button class="btn btn-outline" style="margin-top:14px" onclick="showHome()">ЁЯПа ржлрж┐рж░рзЗ ржпрж╛ржи</button>
+</div>
+<div class="overlay" id="shareOverlay">
+  <div class="popup">
+    <h2>ЁЯОЙ ржжрж╛рж░рзБржг!</h2>
+    <p>ржмржирзНржзрзБржжрзЗрж░ ржЪрзНржпрж╛рж▓рзЗржЮрзНржЬ ржХрж░рзБржи</p>
+    <div class="share-card">
+      <div class="emoji" id="shareEmoji">ЁЯОп</div>
+      <div class="txt" id="shareScore">рзж ржкржпрж╝рзЗржирзНржЯ</div>
+      <div class="sub" id="shareText">ржЖржорж┐ рзо/рззрзж ржкрж╛рж░ржЫрж┐! рждрзБржорж┐ ржкрж╛рж░ржмрзЗ? ЁЯдФ</div>
+    </div>
+    <div class="share-btns">
+      <button class="share-btn sb-native" onclick="shareTo('native')" id="nativeShareBtn">ЁЯУ▒ рж╢рзЗржпрж╝рж╛рж░ ржХрж░рзБржи</button>
+      <button class="share-btn sb-fb" onclick="shareTo('facebook')">ЁЯУШ ржлрзЗрж╕ржмрзБржХ</button>
+      <button class="share-btn sb-wa" onclick="shareTo('whatsapp')">ЁЯТм рж╣рзЛржпрж╝рж╛ржЯрж╕ржЕрзНржпрж╛ржк</button>
+      <button class="share-btn sb-tg" onclick="shareTo('telegram')">тЬИя╕П ржЯрзЗрж▓рж┐ржЧрзНрж░рж╛ржо</button>
+      <button class="share-btn sb-ig" onclick="shareTo('instagram')">ЁЯУ╕ рж╕рзНржЯрзЛрж░рж┐</button>
+      <button class="share-btn sb-copy" onclick="shareTo('copy')" style="grid-column:span 2">ЁЯФЧ рж▓рж┐ржВржХ ржХржкрж┐ ржХрж░рзБржи</button>
+    </div>
+    <button class="btn btn-outline" style="margin-top:12px" onclick="closeShare()">ржмржирзНржз ржХрж░рзБржи</button>
+  </div>
+</div>
+<div class="overlay" id="howToOverlay">
+  <div class="popup" style="text-align:left">
+    <h2 style="text-align:center">тЭУ ржХрзАржнрж╛ржмрзЗ ржЦрзЗрж▓ржмрзЗржи</h2>
+    <div style="color:#ddd;font-size:14px;line-height:1.9;margin-top:14px">
+      <p>1я╕ПтГг ржЗржорзЛржЬрж┐ ржжрзЗржЦрзЗ рж╕ржарж┐ржХ ржЙрждрзНрждрж░ ржмрзЗржЫрзЗ ржирж┐ржи</p>
+      <p>2я╕ПтГг рзирзж рж╕рзЗржХрзЗржирзНржбрзЗрж░ ржоржзрзНржпрзЗ ржЙрждрзНрждрж░ ржжрж┐ржи</p>
+      <p>3я╕ПтГг ржжрзНрж░рзБржд ржЙрждрзНрждрж░ = ржмрзЗрж╢рж┐ ржкржпрж╝рзЗржирзНржЯ</p>
+      <p>4я╕ПтГг ржЯрж╛ржирж╛ рж╕ржарж┐ржХ = ЁЯФе ржХржорзНржмрзЛ ржмрзЛржирж╛рж╕</p>
+      <p>5я╕ПтГг рзйржЯрж┐ рж▓рж╛ржЗржл тАФ ржнрзБрж▓ ржХрж░рж▓рзЗ ржХржоржмрзЗ</p>
+      <p>6я╕ПтГг рж▓рж╛ржЗржл рж╢рзЗрж╖ рж╣рж▓рзЗ ржЕрзНржпрж╛ржб ржжрзЗржЦрзЗ ржлрж┐рж░рзБржи</p>
+      <p>7я╕ПтГг ржЯржк рзирзж рж▓рж┐ржбрж╛рж░ржмрзЛрж░рзНржбрзЗ ржирж╛ржо рждрзБрж▓рзБржи ЁЯПЖ</p>
+    </div>
+    <button class="btn btn-primary" style="margin-top:16px" onclick="closeHowTo()">ржмрзБржЭрзЗржЫрж┐! тЬЕ</button>
+  </div>
+</div>
+<div class="overlay" id="editOverlay">
+  <div class="popup">
+    <h2>тЬПя╕П ржкрзНрж░рзЛржлрж╛ржЗрж▓</h2>
+    <input id="editName" type="text" maxlength="20" placeholder="ржЖржкржирж╛рж░ ржирж╛ржо"
+      style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;font-family:inherit;font-size:15px;margin:10px 0;">
+    <p style="color:#aaa;font-size:13px;margin-bottom:10px">ржПржХржЯрж┐ ржЕрзНржпрж╛ржнрж╛ржЯрж╛рж░ ржмрзЗржЫрзЗ ржирж┐ржи:</p>
+    <div id="emojiPicker" style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:14px;"></div>
+    <button class="btn btn-primary" id="saveProfileBtn">рж╕рзЗржн ржХрж░рзБржи</button>
+    <button class="btn btn-outline" onclick="closeEdit()">ржмрж╛рждрж┐рж▓</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const QUESTIONS = [
+  {e:"ЁЯРЯЁЯСС",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржнрзБржмржи ржорж╛ржЭрж┐","ржорж╛ржЫрзЗрж░ рж░рж╛ржЬрж╛","ржЬрзЗрж▓рзЗ","рж╕ржорзБржжрзНрж░"],a:0},
+  {e:"ЁЯФеЁЯСБя╕П",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржЕржЧрзНржирж┐","ржЪрзЛржЦ","ржЖржЧрзБржирзЗрж░ ржЪрзЛржЦ","ржжрзГрж╖рзНржЯрж┐"],a:2},
+  {e:"ЁЯОмЁЯССЁЯРп",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржмрж╛ржШрзЗрж░ рж░рж╛ржЬрж╛","рж╕рж┐ржирзЗржорж╛рж░ ржмрж╛ржжрж╢рж╛","рж╢ржХрзНрждрж┐ржорж╛ржи","рж░рж╛ржЬрж╛"],a:1},
+  {e:"ЁЯОнтЭдя╕ПЁЯМзя╕П",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржмрзГрж╖рзНржЯрж┐","ржнрж╛рж▓рзЛржмрж╛рж╕рж╛","ржПржХржжрж┐ржирзЗрж░ ржмрзГрж╖рзНржЯрж┐","ржкрзНрж░рзЗржорзЗрж░ ржЧрж▓рзНржк"],a:2},
+  {e:"ЁЯУЦЁЯЪВ",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржЧрж▓рзНржкрзЗрж░ ржЯрзНрж░рзЗржи","рж░рзЗрж▓рзЗрж░ ржЧрж▓рзНржк","рж╢рзЗрж╖ ржЯрзНрж░рзЗржи","ржпрж╛рждрзНрж░рж╛"],a:1},
+  {e:"ЁЯСитАНЁЯжпЁЯО╕",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржЕржирзНржз ржЧрж┐ржЯрж╛рж░рж┐рж╕рзНржЯ","рж╕ржВржЧрзАржд","ржмрж╛ржЙрж▓","рж╢рж┐рж▓рзНржкрзА"],a:0},
+  {e:"ЁЯМКЁЯРКЁЯПШя╕П",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржиржжрзАрж░ ржЧрзНрж░рж╛ржо","ржмрж░рзНрж╖рж╛","ржЬрж▓","ржмржирзНржпрж╛"],a:0},
+  {e:"ЁЯМЩтЬиЁЯСз",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["рждрж╛рж░рж╛ржоржи","ржЪрж╛ржБржжрзЗрж░ ржорзЗржпрж╝рзЗ","рж░рж╛ржд","рж╕рзНржмржкрзНржи"],a:1},
+  {e:"ЁЯФеЁЯЪВЁЯСи",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржЖржЧрзБржи","рж░рзЗрж▓","ржпрж╛рждрзНрж░рзА","ржЕржЧрзНржирж┐ржкрже"],a:3},
+  {e:"ЁЯССЁЯОмЁЯМЯ",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["рж╕рзБржкрж╛рж░рж╕рзНржЯрж╛рж░","ржмрж╛ржжрж╢рж╛","рж░рж╛ржЬрж╛","рж╣рж┐рж░рзЛ"],a:0},
+  {e:"ЁЯМ╕ЁЯТФЁЯОм",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржнрж╛рж▓рзЛржмрж╛рж╕рж╛","ржмрж┐рж░рж╣","ржлрзБрж▓","ржХрж╖рзНржЯ"],a:1},
+  {e:"ЁЯРНЁЯМзя╕ПЁЯСй",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["рж╕рж╛ржк","ржмрж░рзНрж╖рж╛","ржирж╛ржЧрж┐ржи","ржорзЗржпрж╝рзЗ"],a:2},
+  {e:"ЁЯЪВЁЯНГЁЯСж",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржЧрзНрж░рж╛ржорзЗрж░ ржЫрзЗрж▓рзЗ","ржЯрзНрж░рзЗржи","ржпрж╛рждрзНрж░рж╛","ржкрже"],a:0},
+  {e:"ЁЯОмЁЯТкЁЯСК",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржЕрзНржпрж╛ржХрж╢ржи","ржорж╛рж░рж╛ржорж╛рж░рж┐","ржпрзЛржжрзНржзрж╛","рж╣рж┐рж░рзЛ"],a:0},
+  {e:"ЁЯПатЭдя╕ПЁЯСитАНЁЯСйтАНЁЯСз",c:"ржмрж╛ржВрж▓рж╛ рж╕рж┐ржирзЗржорж╛",o:["ржкрж░рж┐ржмрж╛рж░","ржШрж░","ржнрж╛рж▓рзЛржмрж╛рж╕рж╛","ржорж╛"],a:0},
+  {e:"ЁЯРпЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["рж╕рж╛ржХрж┐ржм","ржорж╛рж╢рж░рж╛ржлрж┐","рждрж╛ржорж┐ржо","ржорзБрж╢ржлрж┐ржХ"],a:0},
+  {e:"ЁЯжБЁЯТкЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["рж╕рж╛ржХрж┐ржм","ржорж╛рж╢рж░рж╛ржлрж┐","рж░рж┐ржпрж╝рж╛ржж","рж▓рж┐ржЯржи"],a:1},
+  {e:"ЁЯОпЁЯСС",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржорзБрж╢ржлрж┐ржХ","рждрж╛ржорж┐ржо","рж╕рж╛ржХрж┐ржм","рж╕рзМржорзНржп"],a:0},
+  {e:"тЪбЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржорзЛрж╕рзНрждрж╛ржлрж┐ржЬ","рж░рзБржмрзЗрж▓","рждрж╛рж╕ржХрж┐ржи","рж╢рж░рж┐ржлрзБрж▓"],a:0},
+  {e:"ЁЯМЯЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["рж╢рж╛ржирзНржд","рж╕рж╛ржХрж┐ржм","рждрж╛ржорж┐ржо","рж▓рж┐ржЯржи"],a:0},
+  {e:"ЁЯТЪЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржкрж╛ржХрж┐рж╕рзНрждрж╛ржи","ржмрж╛ржВрж▓рж╛ржжрзЗрж╢","ржнрж╛рж░ржд","рж╢рзНрж░рзАрж▓ржЩрзНржХрж╛"],a:1},
+  {e:"ЁЯО╜ЁЯППЁЯРп",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржЯрж╛ржЗржЧрж╛рж░","ржмрж╛ржВрж▓рж╛ржжрзЗрж╢","ржЬрж╛рж░рзНрж╕рж┐","ржЯрж┐ржо"],a:0},
+  {e:"ЁЯПЖЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржмрж┐рж╢рзНржмржХрж╛ржк","ржЯрзНрж░ржлрж┐","ржЪрзНржпрж╛ржорзНржкрж┐ржпрж╝ржи","ржЬржпрж╝"],a:0},
+  {e:"6я╕ПтГгЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржЫржХрзНржХрж╛","ржЪрж╛рж░","рж░рж╛ржи","рж╕рж┐ржХрзНрж╕"],a:0},
+  {e:"4я╕ПтГгЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржЪрж╛рж░","ржЫржХрзНржХрж╛","ржмрж╛ржЙржирзНржбрж╛рж░рж┐","рж░рж╛ржи"],a:0},
+  {e:"ЁЯздЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржХрж┐ржкрж╛рж░","ржХрзНржпрж╛ржЪ","ржЧрзНрж▓рж╛ржнрж╕","ржлрж┐рж▓рзНржбрж╛рж░"],a:0},
+  {e:"ЁЯО│ЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржмрзЛрж▓рж┐ржВ","ржмрзНржпрж╛ржЯрж┐ржВ","ржлрж┐рж▓рзНржбрж┐ржВ","ржХрзНржпрж╛ржЪ"],a:0},
+  {e:"ЁЯППЁЯОп",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржмрзНржпрж╛ржЯрж╕ржорзНржпрж╛ржи","ржмрзЛрж▓рж╛рж░","ржлрж┐рж▓рзНржбрж╛рж░","ржХрж┐ржкрж╛рж░"],a:0},
+  {e:"ЁЯМПЁЯПЖ",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржмрж┐рж╢рзНржмржХрж╛ржк","ржПрж╢рж┐ржпрж╝рж╛ ржХрж╛ржк","ржЪрзНржпрж╛ржорзНржкрж┐ржпрж╝ржи","ржЯрзНрж░ржлрж┐"],a:0},
+  {e:"ЁЯЯбЁЯФ┤ЁЯПП",c:"ржХрзНрж░рж┐ржХрзЗржЯ",o:["ржмрж▓","ржмрзНржпрж╛ржЯ","рж╕рзНржЯрж╛ржорзНржк","ржЙржЗржХрзЗржЯ"],a:0},
+  {e:"ЁЯОдЁЯО╕ЁЯО╡",c:"рж╕рзЗрж▓рж┐ржмрзНрж░рж┐ржЯрж┐",o:["ржЬрзЗржорж╕","ржмрж╛ржкрзНржкрж╛","ржПржирзНржбрзНрж░рзБ","рж╣рж╛ржмрж┐ржм"],a:0},
+  {e:"ЁЯОмЁЯОнЁЯСС",c:"рж╕рзЗрж▓рж┐ржмрзНрж░рж┐ржЯрж┐",o:["рж╢рж╛ржХрж┐ржм","рж░рж┐ржпрж╝рж╛ржЬ","ржЖржорж┐ржи","ржлрзЗрж░ржжрзМрж╕"],a:0},
+  {e:"ЁЯО╡ЁЯМ╣",c:"рж╕рзЗрж▓рж┐ржмрзНрж░рж┐ржЯрж┐",o:["ржХржирж╛","ржирзНржпрж╛ржирзНрж╕рж┐","ржоржорждрж╛ржЬ","ржЖржБржЦрж┐"],a:0},
+  {e:"ЁЯШОЁЯОд",c:"рж╕рзЗрж▓рж┐ржмрзНрж░рж┐ржЯрж┐",o:["рж╣рж╛ржмрж┐ржм","ржмрж╛ржкрзНржкрж╛","ржЬрзЗржорж╕","рждрж╛рж╣рж╕рж╛ржи"],a:0},
+  {e:"ЁЯОдЁЯС╕",c:"рж╕рзЗрж▓рж┐ржмрзНрж░рж┐ржЯрж┐",o:["ржоржорждрж╛ржЬ","рж░рзБржирж╛ рж▓рж╛ржпрж╝рж▓рж╛","рж╕рж╛ржмрж┐ржирж╛","ржХржирж╛"],a:1},
+  {e:"ЁЯОмЁЯШОЁЯТк",c:"рж╕рзЗрж▓рж┐ржмрзНрж░рж┐ржЯрж┐",o:["рж╢рж╛ржХрж┐ржм","рж░рж┐ржпрж╝рж╛ржЬ","ржмрж╛ржкрзНржкрзА","ржЖржорж┐ржи"],a:0},
+  {e:"ЁЯО╡ЁЯТГ",c:"рж╕рзЗрж▓рж┐ржмрзНрж░рж┐ржЯрж┐",o:["ржирзГрждрзНржп","ржЧрж╛ржи","ржирж╛ржЪ","рж╢рж┐рж▓рзНржкрзА"],a:0},
+  {e:"ЁЯОдЁЯФе",c:"рж╕рзЗрж▓рж┐ржмрзНрж░рж┐ржЯрж┐",o:["ржкржк рж╕рзНржЯрж╛рж░","рж░ржХ рж╕рзНржЯрж╛рж░","ржЧрж╛ржпрж╝ржХ","рж╢рж┐рж▓рзНржкрзА"],a:1},
+  {e:"ЁЯОмЁЯМЯ",c:"рж╕рзЗрж▓рж┐ржмрзНрж░рж┐ржЯрж┐",o:["рж╕рзБржкрж╛рж░рж╕рзНржЯрж╛рж░","рж╣рж┐рж░рзЛ","ржирж╛ржпрж╝ржХ","ржЕржнрж┐ржирзЗрждрж╛"],a:0},
+  {e:"ЁЯОеЁЯУ╕",c:"рж╕рзЗрж▓рж┐ржмрзНрж░рж┐ржЯрж┐",o:["ржЫржмрж┐","ржХрзНржпрж╛ржорзЗрж░рж╛","рж╕рж┐ржирзЗржорж╛","рж╢рзБржЯрж┐ржВ"],a:2},
+  {e:"ЁЯРШЁЯРЬ",c:"ржкрзНрж░ржмрж╛ржж",o:["рж╣рж╛рждрж┐ ржЖрж░ ржкрж┐ржБржкржбрж╝рж╛","рж╣рж╛рждрж┐рж░ ржХрж╛ржЫрзЗ ржкрж┐ржБржкржбрж╝рж╛","ржмржбрж╝ ржЖрж░ ржЫрзЛржЯ","рж╢ржХрзНрждрж┐"],a:0},
+  {e:"ЁЯМКЁЯРЯЁЯРп",c:"ржкрзНрж░ржмрж╛ржж",o:["ржЬрж▓рзЗ ржХрзБржорж┐рж░ ржбрж╛ржЩрж╛ржпрж╝ ржмрж╛ржШ","ржорж╛ржЫ ржзрж░рж╛","ржиржжрзАрж░ ржЬрзАржмржи","ржмрж╛ржШрзЗрж░ ржнржпрж╝"],a:0},
+  {e:"ЁЯеЪЁЯН│",c:"ржкрзНрж░ржмрж╛ржж",o:["ржбрж┐ржо ржерзЗржХрзЗ рж╕рзЛржирж╛","ржбрж┐ржо ржкрзЛржБржЪ","рж╕ржХрж╛рж▓рзЗрж░ ржирж╛рж╕рзНрждрж╛","рж░рж╛ржирзНржирж╛"],a:1},
+  {e:"ЁЯРХЁЯж┤",c:"ржкрзНрж░ржмрж╛ржж",o:["ржХрзБржХрзБрж░рзЗрж░ рж╣рж╛ржбрж╝","рж╣рж╛ржбрж╝рзЗрж░ рж▓рзЛржн","ржХрзНрж╖рзБржзрж╛рж░рзНржд ржХрзБржХрзБрж░","ржкрзНрж░рж╛ржгрзА"],a:0},
+  {e:"ЁЯР╕ЁЯМК",c:"ржкрзНрж░ржмрж╛ржж",o:["ржХрзБржпрж╝рзЛрж░ ржмрзНржпрж╛ржЩ","ржЬрж▓рзЗрж░ ржмрзНржпрж╛ржЩ","рж╕ржмрзБржЬ","ржбрзБржм"],a:0},
+  {e:"ЁЯРвЁЯРЗ",c:"ржкрзНрж░ржмрж╛ржж",o:["ржХржЪрзНржЫржк ржЖрж░ ржЦрж░ржЧрзЛрж╢","ржзрзАрж░рзЗ ржЪрж▓рзЛ","ржкрзНрж░рждрж┐ржпрзЛржЧрж┐рждрж╛","ржжрзНрж░рзБржд ржжрзМржбрж╝"],a:0},
+  {e:"ЁЯжКЁЯНЗ",c:"ржкрзНрж░ржмрж╛ржж",o:["рж╢рж┐ржпрж╝рж╛рж▓ ржЖрж░ ржЖржЩрзБрж░","ржлрж▓","рж╢рж┐ржпрж╝рж╛рж▓","ржЯржХ ржЖржЩрзБрж░"],a:0},
+  {e:"ЁЯРжЁЯки",c:"ржкрзНрж░ржмрж╛ржж",o:["ржкрж╛ржЦрж┐ ржЖрж░ ржкрж╛ржерж░","ржПржХ ржврж┐рж▓рзЗ ржжрзБржЗ ржкрж╛ржЦрж┐","ржкрж╛ржЦрж┐","ржкрж╛ржерж░"],a:1},
+  {e:"ЁЯРЬЁЯНп",c:"ржкрзНрж░ржмрж╛ржж",o:["ржкрж░рж┐рж╢рзНрж░ржо","ржкрж┐ржБржкржбрж╝рж╛","ржоржзрзБ","рж╕ржЮрзНржЪржпрж╝"],a:0},
+  {e:"ЁЯМ│ЁЯНО",c:"ржкрзНрж░ржмрж╛ржж",o:["ржЧрж╛ржЫ ржЖрж░ ржлрж▓","ржЖржо","ржлрж▓","ржмрж╛ржЧрж╛ржи"],a:0},
+  {e:"ЁЯФеЁЯМ╛",c:"ржкрзНрж░ржмрж╛ржж",o:["ржЖржЧрзБржи","ржЦржбрж╝","ржмржирзНржпрж╛","ржмрж┐ржкржж"],a:1},
+  {e:"ЁЯТзЁЯки",c:"ржкрзНрж░ржмрж╛ржж",o:["ржкрж╛ржирж┐ ржЖрж░ ржкрж╛ржерж░","ржлрзЛржБржЯрж╛ ржлрзЛржБржЯрж╛","ржмрзГрж╖рзНржЯрж┐","ржиржжрзА"],a:1},
+  {e:"ЁЯз╡ЁЯкб",c:"ржкрзНрж░ржмрж╛ржж",o:["рж╕рзБрждрж╛","рж╕рзВржЪ","рж╕рзЗрж▓рж╛ржЗ","ржХрж╛ржкржбрж╝"],a:0},
+  {e:"ЁЯРДЁЯеЫ",c:"ржкрзНрж░ржмрж╛ржж",o:["ржЧрж░рзБ","ржжрзБржз","ржЦрж╛ржорж╛рж░","ржкрж╢рзБ"],a:0},
+  {e:"ЁЯОЛЁЯМкя╕П",c:"ржкрзНрж░ржмрж╛ржж",o:["ржмрж╛ржБрж╢","ржЭржбрж╝","ржЧрж╛ржЫ","ржмрж╛рждрж╛рж╕"],a:0},
+  {e:"ЁЯРЯЁЯНЪ",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржорж╛ржЫ ржнрж╛ржд","ржЗрж▓рж┐рж╢","ржмрж┐рж░рж┐ржпрж╝рж╛ржирж┐","ржкрзЛрж▓рж╛ржУ"],a:0},
+  {e:"ЁЯеШЁЯМ╢я╕ПЁЯНЦ",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржХрзЛрж░ржорж╛","ржмрж┐рж░рж┐ржпрж╝рж╛ржирж┐","рж░рзЛрж╕рзНржЯ","рж╣рж╛рж▓рзБржпрж╝рж╛"],a:1},
+  {e:"ЁЯН░ЁЯОВЁЯМ╛",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржкрж┐ржарж╛","ржХрзЗржХ","рж░рзБржЯрж┐","ржорж┐рж╖рзНржЯрж┐"],a:0},
+  {e:"ЁЯеЫЁЯНЪЁЯНм",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржкрж╛ржпрж╝рзЗрж╕","ржжрзБржз ржнрж╛ржд","ржХрзНрж╖рзАрж░","ржорж┐рж╖рзНржЯрж┐"],a:0},
+  {e:"ЁЯлУЁЯеФ",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржЖрж▓рзБ ржкрж░рзЛржЯрж╛","рж░рзБржЯрж┐","ржкрж░рзЛржЯрж╛","рж╕ржорзБржЪрж╛"],a:0},
+  {e:"ЁЯНоЁЯее",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржирж╛рж░ржХрзЗрж▓ ржкрж┐ржарж╛","ржкрзБржбрж┐ржВ","ржжржЗ","ржорж┐рж╖рзНржЯрж┐"],a:0},
+  {e:"ЁЯНЫЁЯРР",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржЦрж┐ржЪрзБржбрж╝рж┐","ржорж╛ржЯржи","ржмрж┐рж░рж┐ржпрж╝рж╛ржирж┐","ржХрж╛рж░рж┐"],a:1},
+  {e:"ЁЯНдЁЯНЪ",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржЪрж┐ржВржбрж╝рж┐","ржнрж╛ржд","ржХрж╛рж░рж┐","ржорж╛ржЫ"],a:0},
+  {e:"ЁЯенЁЯНж",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржЖржо","ржЖржЗрж╕ржХрзНрж░рж┐ржо","ржорж┐рж╖рзНржЯрж┐","ржлрж▓"],a:1},
+  {e:"ЁЯН╡тШХ",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржЪрж╛","ржХржлрж┐","ржжрзБржз","ржкрж╛ржирж┐"],a:0},
+  {e:"ЁЯеЮЁЯНп",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржкрж┐ржарж╛","ржоржзрзБ","ржкрзНржпрж╛ржиржХрзЗржХ","ржорж┐рж╖рзНржЯрж┐"],a:0},
+  {e:"ЁЯН▓ЁЯРЯ",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржорж╛ржЫрзЗрж░ ржЭрзЛрж▓","рж╕рзНржпрзБржк","ржХрж╛рж░рж┐","рждрж░ржХрж╛рж░рж┐"],a:0},
+  {e:"ЁЯНЪЁЯНЧ",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржнрж╛ржд ржорзБрж░ржЧрж┐","ржмрж┐рж░рж┐ржпрж╝рж╛ржирж┐","ржкрзЛрж▓рж╛ржУ","ржХрж╛рж░рж┐"],a:0},
+  {e:"ЁЯМ░ЁЯНм",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["ржорж┐рж╖рзНржЯрж┐","ржмрж╛ржжрж╛ржо","ржирж╛рзЬрзБ","рж▓рж╛ржбрзНржбрзБ"],a:2},
+  {e:"ЁЯеЧЁЯНЕ",c:"ржмрж╛ржВрж▓рж╛ ржЦрж╛ржмрж╛рж░",o:["рж╕рж╛рж▓рж╛ржж","рж╕ржмржЬрж┐","ржЯржорзЗржЯрзЛ","рждрж░ржХрж╛рж░рж┐"],a:0},
+  {e:"ЁЯжБ",c:"ржкрзНрж░рж╛ржгрзА",o:["рж╕рж┐ржВрж╣","ржмрж╛ржШ","ржЪрж┐рждрж╛","ржнрж╛рж▓рзНрж▓рзБржХ"],a:0},
+  {e:"ЁЯРШ",c:"ржкрзНрж░рж╛ржгрзА",o:["рж╣рж╛рждрж┐","ржЧржгрзНржбрж╛рж░","ржЬрж┐рж░рж╛ржл","ржЙржЯ"],a:0},
+  {e:"ЁЯжЪ",c:"ржкрзНрж░рж╛ржгрзА",o:["ржоржпрж╝рзВрж░","ржЯрж┐ржпрж╝рж╛","ржХрж╛ржХ","ржкрж╛ржпрж╝рж░рж╛"],a:0},
+  {e:"ЁЯРЕ",c:"ржкрзНрж░рж╛ржгрзА",o:["ржмрж╛ржШ","рж╕рж┐ржВрж╣","ржЪрж┐рждрж╛","ржЬрж╛ржЧрзБржпрж╝рж╛рж░"],a:0},
+  {e:"ЁЯжМ",c:"ржкрзНрж░рж╛ржгрзА",o:["рж╣рж░рж┐ржг","ржЫрж╛ржЧрж▓","ржнрзЗржбрж╝рж╛","ржЧрж░рзБ"],a:0},
+  {e:"ЁЯРЭЁЯНп",c:"ржкрзНрж░рж╛ржгрзА",o:["ржоржзрзБ","ржорзМржорж╛ржЫрж┐","ржлрзБрж▓","ржШрзЛржбрж╝рж╛"],a:1},
+  {e:"ЁЯРТЁЯНМ",c:"ржкрзНрж░рж╛ржгрзА",o:["ржмрж╛ржирж░","ржХрж▓рж╛","ржЧрж╛ржЫ","ржЬржЩрзНржЧрж▓"],a:0},
+  {e:"ЁЯРзтЭДя╕П",c:"ржкрзНрж░рж╛ржгрзА",o:["ржкрзЗржЩрзНржЧрзБржЗржи","ржмрж░ржл","ржкрж╛ржЦрж┐","ржарж╛ржирзНржбрж╛"],a:0},
+  {e:"ЁЯРмЁЯМК",c:"ржкрзНрж░рж╛ржгрзА",o:["ржбрж▓ржлрж┐ржи","ржорж╛ржЫ","рж╕ржорзБржжрзНрж░","рждрж┐ржорж┐"],a:0},
+  {e:"ЁЯжТЁЯМ│",c:"ржкрзНрж░рж╛ржгрзА",o:["ржЬрж┐рж░рж╛ржл","ржЧрж╛ржЫ","рж▓ржорзНржмрж╛","ржЖржлрзНрж░рж┐ржХрж╛"],a:0},
+  {e:"ЁЯРвЁЯМ▒",c:"ржкрзНрж░рж╛ржгрзА",o:["ржХржЪрзНржЫржк","ржШрж╛рж╕","ржзрзАрж░","рж╢рзЗрж▓"],a:0},
+  {e:"ЁЯжЛЁЯМ╕",c:"ржкрзНрж░рж╛ржгрзА",o:["ржкрзНрж░ржЬрж╛ржкрждрж┐","ржлрзБрж▓","рж░ржЩрж┐ржи","ржкрзЛржХрж╛"],a:0},
+  {e:"ЁЯР║ЁЯМЩ",c:"ржкрзНрж░рж╛ржгрзА",o:["ржирзЗржХржбрж╝рзЗ","ржЪрж╛ржБржж","рж░рж╛ржд","рж╣рж╛ржУржпрж╝рж╛"],a:0},
+  {e:"ЁЯжЕтШБя╕П",c:"ржкрзНрж░рж╛ржгрзА",o:["ржИржЧрж▓","ржЖржХрж╛рж╢","ржЙржбрж╝рж╛","ржкрж╛ржЦрж┐"],a:0},
+  {e:"ЁЯР╕ЁЯНГ",c:"ржкрзНрж░рж╛ржгрзА",o:["ржмрзНржпрж╛ржЩ","ржкрж╛рждрж╛","рж╕ржмрзБржЬ","ржЬрж▓"],a:0},
+  {e:"ЁЯЗзЁЯЗй",c:"ржмрж╛ржВрж▓рж╛ржжрзЗрж╢",o:["ржмрж╛ржВрж▓рж╛ржжрзЗрж╢","ржкрж╛ржХрж┐рж╕рзНрждрж╛ржи","ржнрж╛рж░ржд","ржирзЗржкрж╛рж▓"],a:0},
+  {e:"ЁЯМЙЁЯПЮя╕П",c:"ржмрж╛ржВрж▓рж╛ржжрзЗрж╢",o:["ржкржжрзНржорж╛ рж╕рзЗрждрзБ","ржпржорзБржирж╛ рж╕рзЗрждрзБ","ржмржЩрзНржЧржмржирзНржзрзБ рж╕рзЗрждрзБ","рж╣рж╛рж░рзНржбрж┐ржЮрзНржЬ рж╕рзЗрждрзБ"],a:0},
+  {e:"ЁЯПЫя╕ПЁЯХМ",c:"ржмрж╛ржВрж▓рж╛ржжрзЗрж╢",o:["ржорж╕ржЬрж┐ржж","ржоржирзНржжрж┐рж░","ржЧрж┐рж░рзНржЬрж╛","ржЗржорж╛рж░ржд"],a:0},
+  {e:"ЁЯМ╛ЁЯРД",c:"ржмрж╛ржВрж▓рж╛ржжрзЗрж╢",o:["ржХрзГрж╖рж┐","ржЦрж╛ржорж╛рж░","ржЧрзНрж░рж╛ржо","ржзрж╛ржи"],a:0},
+  {e:"ЁЯЪгЁЯМК",c:"ржмрж╛ржВрж▓рж╛ржжрзЗрж╢",o:["ржирзМржХрж╛","ржиржжрзА","ржорж╛ржЭрж┐","ржнрж╛рж╕рж╛"],a:0},
+  {e:"ЁЯМ┤ЁЯПЦя╕П",c:"ржмрж╛ржВрж▓рж╛ржжрзЗрж╢",o:["ржХржХрзНрж╕ржмрж╛ржЬрж╛рж░","рж╕рзЗржирзНржЯ ржорж╛рж░рзНржЯрж┐ржи","ржкрждрзЗржЩрзНржЧрж╛","рж╕ржорзБржжрзНрж░"],a:0},
+  {e:"ЁЯЫХЁЯПЫя╕П",c:"ржмрж╛ржВрж▓рж╛ржжрзЗрж╢",o:["ржоржирзНржжрж┐рж░","ржРрждрж┐рж╣рзНржп","ржЗржорж╛рж░ржд","ржкрзБрж░рж╛ржирзЛ"],a:0},
+  {e:"ЁЯРЕЁЯМ╛",c:"ржмрж╛ржВрж▓рж╛ржжрзЗрж╢",o:["рж╕рзБржирзНржжрж░ржмржи","ржмрж╛ржШ","ржЬржЩрзНржЧрж▓","ржорзНржпрж╛ржиржЧрзНрж░рзЛржн"],a:0},
+  {e:"ЁЯМ╛ЁЯЪЬ",c:"ржмрж╛ржВрж▓рж╛ржжрзЗрж╢",o:["ржХрзГрж╖ржХ","ржзрж╛ржи","ржЯрзНрж░рж╛ржХрзНржЯрж░","ржЦрзЗржд"],a:0},
+  {e:"ЁЯНЪЁЯМ╛",c:"ржмрж╛ржВрж▓рж╛ржжрзЗрж╢",o:["ржзрж╛ржи","ржЪрж╛рж▓","ржнрж╛ржд","ржлрж╕рж▓"],a:0},
+  {e:"ЁЯУ▒ЁЯТм",c:"рж╕рзЛрж╢рзНржпрж╛рж▓ ржорж┐ржбрж┐ржпрж╝рж╛",o:["рж╣рзЛржпрж╝рж╛ржЯрж╕ржЕрзНржпрж╛ржк","ржорзЗрж╕рзЗржЮрзНржЬрж╛рж░","ржЯрзЗрж▓рж┐ржЧрзНрж░рж╛ржо","рж╕рж┐ржЧржирзНржпрж╛рж▓"],a:0},
+  {e:"ЁЯУ╖ЁЯУ▒",c:"рж╕рзЛрж╢рзНржпрж╛рж▓ ржорж┐ржбрж┐ржпрж╝рж╛",o:["ржЗржирж╕рзНржЯрж╛ржЧрзНрж░рж╛ржо","ржлрзЗрж╕ржмрзБржХ","ржЯрж┐ржХржЯржХ","рж╕рзНржирзНржпрж╛ржкржЪрзНржпрж╛ржЯ"],a:0},
+  {e:"ЁЯОеЁЯУ▒",c:"рж╕рзЛрж╢рзНржпрж╛рж▓ ржорж┐ржбрж┐ржпрж╝рж╛",o:["ржЯрж┐ржХржЯржХ","ржЗржЙржЯрж┐ржЙржм","ржирзЗржЯржлрзНрж▓рж┐ржХрзНрж╕","ржнрж╛ржЗржорж┐ржУ"],a:0},
+  {e:"ЁЯРжЁЯТЩ",c:"рж╕рзЛрж╢рзНржпрж╛рж▓ ржорж┐ржбрж┐ржпрж╝рж╛",o:["ржЯрзБржЗржЯрж╛рж░","ржлрзЗрж╕ржмрзБржХ","рж▓рж┐ржВржХржбржЗржи","рж░рзЗржбрж┐ржЯ"],a:0},
+  {e:"ЁЯУШЁЯСН",c:"рж╕рзЛрж╢рзНржпрж╛рж▓ ржорж┐ржбрж┐ржпрж╝рж╛",o:["ржлрзЗрж╕ржмрзБржХ","ржЗржирж╕рзНржЯрж╛ржЧрзНрж░рж╛ржо","ржЯрзБржЗржЯрж╛рж░","рж▓рж┐ржВржХржбржЗржи"],a:0},
+  {e:"тЦ╢я╕ПЁЯФ┤",c:"рж╕рзЛрж╢рзНржпрж╛рж▓ ржорж┐ржбрж┐ржпрж╝рж╛",o:["ржЗржЙржЯрж┐ржЙржм","ржирзЗржЯржлрзНрж▓рж┐ржХрзНрж╕","ржнрж╛ржЗржорж┐ржУ","ржЯрзБржЗржЪ"],a:0},
+  {e:"ЁЯТ╝ЁЯУК",c:"рж╕рзЛрж╢рзНржпрж╛рж▓ ржорж┐ржбрж┐ржпрж╝рж╛",o:["рж▓рж┐ржВржХржбржЗржи","ржЗржиржбрж┐ржб","ржЧрзНрж▓рж╛рж╕ржбрзЛрж░","ржоржирж╕рзНржЯрж╛рж░"],a:0},
+  {e:"ЁЯС╗ЁЯУ╕",c:"рж╕рзЛрж╢рзНржпрж╛рж▓ ржорж┐ржбрж┐ржпрж╝рж╛",o:["рж╕рзНржирзНржпрж╛ржкржЪрзНржпрж╛ржЯ","ржЗржирж╕рзНржЯрж╛ржЧрзНрж░рж╛ржо","ржЯрж┐ржХржЯржХ","ржлрзЗрж╕ржмрзБржХ"],a:0},
+  {e:"тЬИя╕ПЁЯТм",c:"рж╕рзЛрж╢рзНржпрж╛рж▓ ржорж┐ржбрж┐ржпрж╝рж╛",o:["ржЯрзЗрж▓рж┐ржЧрзНрж░рж╛ржо","рж╣рзЛржпрж╝рж╛ржЯрж╕ржЕрзНржпрж╛ржк","ржорзЗрж╕рзЗржЮрзНржЬрж╛рж░","рж╕рж┐ржЧржирзНржпрж╛рж▓"],a:0},
+  {e:"ЁЯФ┤ЁЯУ║",c:"рж╕рзЛрж╢рзНржпрж╛рж▓ ржорж┐ржбрж┐ржпрж╝рж╛",o:["ржирзЗржЯржлрзНрж▓рж┐ржХрзНрж╕","ржЗржЙржЯрж┐ржЙржм","ржкрзНрж░рж╛ржЗржо","рж╣рзБрж▓рзБ"],a:0},
+  {e:"ЁЯНХЁЯЗоЁЯЗ╣",c:"ржоржЬрж╛рж░",o:["ржкрж┐рзОржЬрж╛","ржмрж╛рж░рзНржЧрж╛рж░","ржкрж╛рж╕рзНрждрж╛","ржирзБржбрж▓рж╕"],a:0},
+  {e:"ЁЯОГЁЯС╗",c:"ржоржЬрж╛рж░",o:["рж╣рзНржпрж╛рж▓рзЛржЙржЗржи","ржХрзНрж░рж┐рж╕ржорж╛рж╕","ржИржж","ржкрзВржЬрж╛"],a:0},
+  {e:"ЁЯОДЁЯОЕ",c:"ржоржЬрж╛рж░",o:["ржмржбрж╝ржжрж┐ржи","ржиржмржмрж░рзНрж╖","ржИржж","ржкрзВржЬрж╛"],a:0},
+  {e:"ЁЯОЗЁЯкФ",c:"ржоржЬрж╛рж░",o:["ржжрзАржкрж╛ржмрж▓рж┐","ржИржж","ржмржбрж╝ржжрж┐ржи","ржкрж╣рзЗрж▓рж╛ ржмрзИрж╢рж╛ржЦ"],a:0},
+  {e:"ЁЯМЩЁЯМЫтнР",c:"ржоржЬрж╛рж░",o:["рж░рж╛ржд","рж╕ржирзНржзрзНржпрж╛","ржнрзЛрж░","рж╕ржХрж╛рж▓"],a:0},
+  {e:"тШАя╕ПЁЯПЦя╕П",c:"ржоржЬрж╛рж░",o:["ржЧрж░ржо","рж╢рзАржд","ржмрж░рзНрж╖рж╛","ржмрж╕ржирзНржд"],a:0},
+  {e:"ЁЯОЙЁЯОК",c:"ржоржЬрж╛рж░",o:["ржЙржжржпрж╛ржкржи","ржЬржирзНржоржжрж┐ржи","ржмрж┐ржмрж╛рж╣","ржкрж╛рж░рзНржЯрж┐"],a:1},
+  {e:"ЁЯОВЁЯХпя╕П",c:"ржоржЬрж╛рж░",o:["ржЬржирзНржоржжрж┐ржи","ржХрзЗржХ","ржкрж╛рж░рзНржЯрж┐","ржЙржкрж╣рж╛рж░"],a:0},
+  {e:"ЁЯОБЁЯОА",c:"ржоржЬрж╛рж░",o:["ржЙржкрж╣рж╛рж░","ржмржХрзНрж╕","рж░рж┐ржмржи","ржЕржирзБрж░рзЛржз"],a:0},
+  {e:"ЁЯТРЁЯМ╣",c:"ржоржЬрж╛рж░",o:["ржлрзБрж▓","ржнрж╛рж▓рзЛржмрж╛рж╕рж╛","ржЧрзЛрж▓рж╛ржк","ржЙржкрж╣рж╛рж░"],a:0},
+  {e:"ЁЯТНЁЯТТ",c:"ржоржЬрж╛рж░",o:["ржмрж┐ржмрж╛рж╣","ржмрж╛ржЧржжрж╛ржи","ржкрзНрж░рзЗржо","ржЖржВржЯрж┐"],a:0},
+  {e:"ЁЯОУЁЯОЙ",c:"ржоржЬрж╛рж░",o:["ржЧрзНрж░рзНржпрж╛ржЬрзБржпрж╝рзЗрж╢ржи","ржкрж╛рж░рзНржЯрж┐","ржЙржжржпрж╛ржкржи","ржбрж┐ржЧрзНрж░рж┐"],a:0},
+  {e:"ЁЯПЦя╕ПЁЯМ┤",c:"ржоржЬрж╛рж░",o:["ржЫрзБржЯрж┐","рж╕ржорзБржжрзНрж░","ржмрж┐ржЪ","ржЯрзНржпрзБрж░"],a:0},
+  {e:"ЁЯОоЁЯХ╣я╕П",c:"ржоржЬрж╛рж░",o:["ржЧрзЗржорж┐ржВ","ржнрж┐ржбрж┐ржУ ржЧрзЗржо","ржЦрзЗрж▓рж╛","ржХржирж╕рзЛрж▓"],a:0},
+  {e:"ЁЯОмЁЯН┐",c:"ржоржЬрж╛рж░",o:["рж╕рж┐ржирзЗржорж╛","ржорзБржнрж┐","ржерж┐ржпрж╝рзЗржЯрж╛рж░","рж╢рзЛ"],a:0},
+  {e:"тЪ╜ЁЯеЕ",c:"ржоржЬрж╛рж░",o:["ржлрзБржЯржмрж▓","ржЧрзЛрж▓","ржЦрзЗрж▓рж╛","ржмрж▓"],a:0},
+  {e:"ЁЯПАЁЯПЖ",c:"ржоржЬрж╛рж░",o:["ржмрж╛рж╕рзНржХрзЗржЯржмрж▓","ржмрж▓","ржЦрзЗрж▓рж╛","ржЯрзНрж░ржлрж┐"],a:0},
+  {e:"ЁЯО╛ЁЯП╕",c:"ржоржЬрж╛рж░",o:["ржЯрзЗржирж┐рж╕","ржмрзНржпрж╛ржбржорж┐ржирзНржЯржи","ржЦрзЗрж▓рж╛","рж░рзНржпрж╛ржХрзЗржЯ"],a:0},
+  {e:"ЁЯПКЁЯМК",c:"ржоржЬрж╛рж░",o:["рж╕рж╛ржБрждрж╛рж░","ржкрж╛ржирж┐","рж╕ржорзБржжрзНрж░","ржЦрзЗрж▓рж╛"],a:0},
+  {e:"ЁЯЪ┤ЁЯПБ",c:"ржоржЬрж╛рж░",o:["рж╕рж╛ржЗржХрзНрж▓рж┐ржВ","рж░рзЗрж╕","ржЦрзЗрж▓рж╛","ржмрж╛ржЗржХ"],a:0},
+  {e:"ЁЯО╕ЁЯОд",c:"ржоржЬрж╛рж░",o:["ржЧрж╛ржи","ржХржирж╕рж╛рж░рзНржЯ","ржорж┐ржЙржЬрж┐ржХ","ржмрзНржпрж╛ржирзНржб"],a:0},
+  {e:"ЁЯОиЁЯЦМя╕П",c:"ржоржЬрж╛рж░",o:["ржЫржмрж┐ ржЖржБржХрж╛","ржЖрж░рзНржЯ","ржкрзЗржЗржирзНржЯрж┐ржВ","рж░ржЩ"],a:0},
+  {e:"ЁЯУЪЁЯУЦ",c:"ржоржЬрж╛рж░",o:["ржмржЗ ржкржбрж╝рж╛","ржкржбрж╝рж╛рж╢рзЛржирж╛","рж╢рж┐ржХрзНрж╖рж╛","ржирж▓рзЗржЬ"],a:0},
+  {e:"ЁЯТ╗ЁЯЦея╕П",c:"ржоржЬрж╛рж░",o:["ржХржорзНржкрж┐ржЙржЯрж╛рж░","рж▓рзНржпрж╛ржкржЯржк","ржкрзНрж░рзЛржЧрзНрж░рж╛ржорж┐ржВ","ржЯрзЗржХ"],a:0},
+  {e:"ЁЯУ▒тМЪ",c:"ржоржЬрж╛рж░",o:["ржкрзНрж░ржпрзБржХрзНрждрж┐","ржЧрзНржпрж╛ржЬрзЗржЯ","ржбрж┐ржнрж╛ржЗрж╕","рж╕рзНржорж╛рж░рзНржЯ"],a:0}
+];
+
+const AVATARS = ["ЁЯШО","ЁЯжБ","ЁЯМ╕","ЁЯФе","ЁЯСС","тЪб","ЁЯТл","ЁЯОп","ЁЯМЯ","ЁЯОо","ЁЯМ║","ЁЯЪА","ЁЯМЩ","тЪ╜","ЁЯжЛ","ЁЯМИ","ЁЯРп","ЁЯТО","ЁЯжД","ЁЯО╕"];
+const state = {score:0,lives:3,maxLives:3,qIndex:0,correct:0,total:10,combo:0,timer:null,timeLeft:20,usedIdx:[],player:{name:"ржЦрзЗрж▓рзЛржпрж╝рж╛ржбрж╝",emoji:"ЁЯШО",uid:null},currentQ:null,lastCorrect:0,challenge:null};
+const API = '/api';
+const toBn = n => String(n).replace(/\d/g, d => 'рзжрззрзирзйрзкрзлрзмрзнрзорзп'[d]);
+const $ = id => document.getElementById(id);
+
+function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0);}
+function closeOverlay(id){$(id).classList.remove('active');}
+function openOverlay(id){$(id).classList.add('active');}
+
+function loadProfile(){
+  try{const p=JSON.parse(localStorage.getItem('profile')||'null');if(p){state.player=p;}else{state.player.uid='u_'+Math.random().toString(36).slice(2,10);saveProfile();}}
+  catch(e){state.player.uid='u_'+Math.random().toString(36).slice(2,10);}
+}
+function saveProfile(){localStorage.setItem('profile',JSON.stringify(state.player));updateHomeInfo();}
+function updateHomeInfo(){
+  $('homeName').textContent=state.player.name;
+  const av=$('homeAvatar');
+  if(state.player.picture){av.innerHTML=`<img src="${state.player.picture}" alt="">`;}else{av.textContent=state.player.emoji;}
+  const stats=getStats();
+  $('homeHighScore').textContent=toBn(stats.best);
+  $('statTotal').textContent=toBn(stats.count);
+  $('statAvg').textContent=toBn(stats.avg);
+  $('statBest').textContent=toBn(stats.best);
+}
+function getStats(){
+  try{const h=JSON.parse(localStorage.getItem('history')||'[]');const best=h.length?Math.max(...h.map(x=>x.score)):0;const avg=h.length?Math.round(h.reduce((s,x)=>s+x.score,0)/h.length):0;return{count:h.length,best,avg};}
+  catch(e){return{count:0,best:0,avg:0};}
+}
+function saveHistory(score){
+  try{const h=JSON.parse(localStorage.getItem('history')||'[]');h.push({score,date:Date.now()});while(h.length>100)h.shift();localStorage.setItem('history',JSON.stringify(h));}catch(e){}
+}
+function editProfile(){
+  $('editName').value=state.player.name;
+  const picker=$('emojiPicker');picker.innerHTML='';
+  AVATARS.forEach(e=>{
+    const b=document.createElement('button');
+    b.textContent=e;
+    b.style.cssText=`font-size:22px;padding:6px;border-radius:10px;border:2px solid ${state.player.emoji===e?'#FF6B6B':'rgba(255,255,255,.15)'};background:rgba(255,255,255,.05);cursor:pointer;`;
+    b.onclick=()=>{state.player.emoji=e;state.player.picture=null;editProfile();};
+    picker.appendChild(b);
+  });
+  openOverlay('editOverlay');
+}
+function closeEdit(){closeOverlay('editOverlay');}
+function saveProfileFromEdit(){
+  const n=$('editName').value.trim();
+  if(n)state.player.name=n;
+  saveProfile();closeEdit();showToast('тЬЕ рж╕рзЗржн рж╣ржпрж╝рзЗржЫрзЗ!');
+}
+
+function startGame(){
+  state.score=0;state.lives=3;state.qIndex=0;state.correct=0;state.combo=0;state.usedIdx=[];
+  updateLives();updateScore();showScreen('screen-game');nextQuestion();
+}
+function updateLives(){let h='';for(let i=0;i<state.maxLives;i++)h+=i<state.lives?'тЭдя╕П':'<span class="lost">тЭдя╕П</span>';$('livesDisplay').innerHTML=h;}
+function updateScore(){$('currentScore').textContent=toBn(state.score);$('progressFill').style.width=(state.qIndex/state.total*100)+'%';$('qCounter').textContent=toBn(Math.min(state.qIndex+1,state.total))+'/'+toBn(state.total);}
+function pickQ(){
+  let avail=QUESTIONS.map((_,i)=>i).filter(i=>!state.usedIdx.includes(i));
+  if(!avail.length){state.usedIdx=[];avail=QUESTIONS.map((_,i)=>i);}
+  const idx=avail[Math.floor(Math.random()*avail.length)];state.usedIdx.push(idx);return QUESTIONS[idx];
+}
+function nextQuestion(){
+  if(state.qIndex>=state.total){endGame(true);return;}
+  if(state.lives<=0){endGame(false);return;}
+  const q=pickQ();state.currentQ=q;
+  $('emojiDisplay').textContent=q.e;
+  $('categoryDisplay').textContent=q.c;
+  const c=$('optionsContainer');c.innerHTML='';
+  const opts=q.o.map((opt,i)=>({opt,i}));opts.sort(()=>Math.random()-0.5);
+  opts.forEach(({opt,i})=>{const b=document.createElement('button');b.className='option-btn';b.textContent=opt;b.onclick=()=>selectAnswer(i,b);c.appendChild(b);});
+  state.qIndex++;updateScore();startTimer();
+}
+function startTimer(){
+  clearInterval(state.timer);state.timeLeft=20;
+  const f=$('timerFill');f.style.width='100%';f.classList.remove('warning');
+  state.timer=setInterval(()=>{
+    state.timeLeft-=0.1;const p=Math.max(0,state.timeLeft/20*100);f.style.width=p+'%';
+    if(state.timeLeft<=5)f.classList.add('warning');
+    if(state.timeLeft<=0){clearInterval(state.timer);timeUp();}
+  },100);
+}
+function timeUp(){
+  document.querySelectorAll('.option-btn').forEach(b=>b.disabled=true);
+  const q=state.currentQ;
+  document.querySelectorAll('.option-btn').forEach(b=>{if(b.textContent===q.o[q.a])b.classList.add('correct');});
+  loseLife();
+}
+function selectAnswer(idx,btn){
+  clearInterval(state.timer);
+  document.querySelectorAll('.option-btn').forEach(b=>b.disabled=true);
+  const q=state.currentQ;
+  if(idx===q.a){
+    btn.classList.add('correct');state.correct++;state.combo++;
+    let pts=10+Math.max(0,Math.floor(state.timeLeft/2));
+    if(state.combo>=3){pts*=2;showCombo('ЁЯФе ржХржорзНржмрзЛ ├Чрзи!');}else if(state.combo===2){showCombo('тЪб ржХржорзНржмрзЛ!');}
+    state.score+=pts;updateScore();setTimeout(nextQuestion,800);
+  }else{
+    btn.classList.add('wrong');
+    document.querySelectorAll('.option-btn').forEach(b=>{if(b.textContent===q.o[q.a])b.classList.add('correct');});
+    state.combo=0;loseLife();
+  }
+}
+function showCombo(txt){const b=$('comboBadge');b.textContent=txt;b.style.display='block';setTimeout(()=>b.style.display='none',1000);}
+function loseLife(){state.lives--;updateLives();if(state.lives<=0)setTimeout(()=>endGame(false),1200);else setTimeout(nextQuestion,1200);}
+function endGame(completed){
+  clearInterval(state.timer);state.lastCorrect=state.correct;saveHistory(state.score);submitScore();
+  const emoji=completed?(state.correct>=8?'ЁЯПЖ':'ЁЯОЙ'):'ЁЯШв';
+  const title=completed?'ржжрзБрж░рзНржжрж╛ржирзНржд!':'рж▓рж╛ржЗржл рж╢рзЗрж╖!';
+  const msg=completed?`рждрзБржорж┐ ${toBn(state.correct)}/${toBn(state.total)} рж╕ржарж┐ржХ!`:'ржЪрж┐ржирзНрждрж╛ ржирзЗржЗ! ржЕрзНржпрж╛ржб ржжрзЗржЦрзЗ ржЖржмрж╛рж░ рж╢рзБрж░рзБ ржХрж░рзБржи';
+  $('gameOverEmoji').textContent=emoji;$('gameOverTitle').textContent=title;
+  $('finalScoreDisplay').textContent=toBn(state.score);$('gameOverMsg').textContent=msg;
+  openOverlay('gameOverOverlay');updateHomeInfo();
+}
+function watchAdForLives(){
+  closeOverlay('gameOverOverlay');openOverlay('adOverlay');
+  let c=5;$('adTimer').textContent=toBn(c);$('adSkipBtn').classList.remove('show');
+  const t=setInterval(()=>{c--;$('adTimer').textContent=toBn(c);if(c<=0){clearInterval(t);$('adSkipBtn').classList.add('show');}},1000);
+}
+function finishAd(){
+  closeOverlay('adOverlay');state.lives=state.maxLives;updateLives();showToast('тЭдя╕П рзйржЯрж┐ рж▓рж╛ржЗржл ржкрзЗржпрж╝рзЗржЫрзЗржи!');
+  if(state.qIndex>=state.total)endGame(true);else{showScreen('screen-game');nextQuestion();}
+}
+
+let lbCache={};
+async function fetchLeaderboard(tab){
+  if(lbCache[tab])return lbCache[tab];
+  try{
+    const r=await fetch(`${API}/leaderboard?tab=${tab}&t=${Date.now()}`);
+    if(!r.ok)throw new Error('fail');
+    const d=await r.json();lbCache[tab]=d.scores||[];return lbCache[tab];
+  }catch(e){return getLocalLeaderboard();}
+}
+function getLocalLeaderboard(){
+  const fake=[
+    {name:"рж░рж╛рж╣рзБрж▓",emoji:"ЁЯжБ",score:3456},{name:"рж╕рж╛ржжрж┐ржпрж╝рж╛",emoji:"ЁЯМ╕",score:3210},
+    {name:"ржХрж░рж┐ржо",emoji:"ЁЯФе",score:2987},{name:"ржирж╛ржлрж┐рж╕рж╛",emoji:"ЁЯСС",score:2876},
+    {name:"рждрж╛ржиржнрзАрж░",emoji:"тЪб",score:2765},{name:"ржорзЗрж╣ржЬрж╛ржмрж┐ржи",emoji:"ЁЯТл",score:2654},
+    {name:"ржЖрж░рж┐ржл",emoji:"ЁЯОп",score:2543},{name:"рж╕рзБржорж╛ржЗржпрж╝рж╛",emoji:"ЁЯМЯ",score:2432},
+    {name:"ржлрж╛рж╣рж┐ржо",emoji:"ЁЯОо",score:2321},{name:"ржирзБрж╕рж░рж╛ржд",emoji:"ЁЯМ║",score:2210},
+    {name:"ржЗржорж░рж╛ржи",emoji:"ЁЯЪА",score:2100},{name:"рждрж╛рж╕ржирж┐ржо",emoji:"ЁЯМЩ",score:1990},
+    {name:"рж╢рж╛ржХрж┐рж▓",emoji:"тЪ╜",score:1880},{name:"ржЬрж╛ржирзНржирж╛ржд",emoji:"ЁЯжЛ",score:1770},
+    {name:"рж░рж╛ржлрж┐",emoji:"ЁЯО╕",score:1660},{name:"ржорзМржорж┐рждрж╛",emoji:"ЁЯМИ",score:1550},
+    {name:"рж╕рж╛ржмрзНржмрж┐рж░",emoji:"ЁЯРп",score:1440},{name:"ржЕржирж┐ржХ",emoji:"ЁЯТО",score:1330},
+    {name:"рждрж┐рж╢рж╛",emoji:"ЁЯжД",score:1220},{name:"рж░ржирж┐",emoji:"ЁЯОд",score:1110}
+  ];
+  const h=JSON.parse(localStorage.getItem('history')||'[]');
+  const best=h.length?Math.max(...h.map(x=>x.score)):0;
+  if(best>0){fake.push({name:state.player.name,emoji:state.player.emoji,picture:state.player.picture,score:best,isMe:true});}
+  return fake.sort((a,b)=>b.score-a.score).slice(0,20);
+}
+async function showLeaderboard(){showScreen('screen-leaderboard');await renderLb('all');}
+async function switchLbTab(tab,e){document.querySelectorAll('.lb-tab').forEach(t=>t.classList.remove('active'));e.target.classList.add('active');await renderLb(tab);}
+async function renderLb(tab){
+  const list=$('lbList');list.innerHTML='<div class="loading"><div class="spinner"></div>рж▓рзЛржб рж╣ржЪрзНржЫрзЗ...</div>';
+  const scores=await fetchLeaderboard(tab);list.innerHTML='';
+  if(!scores.length){list.innerHTML='<div class="loading">ржПржЦржирзЛ ржХрзЛржирзЛ рж╕рзНржХрзЛрж░ ржирзЗржЗ</div>';return;}
+  scores.slice(0,20).forEach((p,i)=>{
+    const rank=i+1;const item=document.createElement('div');
+    item.className='lb-item'+(rank===1?' top1':rank===2?' top2':rank===3?' top3':'');
+    if(p.uid&&p.uid===state.player.uid)item.classList.add('lb-me');
+    const rankIcon=rank===1?'ЁЯеЗ':rank===2?'ЁЯеИ':rank===3?'ЁЯеЙ':toBn(rank);
+    const avatar=p.picture?`<img src="${p.picture}" alt="">`:(p.emoji||'ЁЯШО');
+    item.innerHTML=`<div class="lb-rank">${rankIcon}</div><div class="lb-avatar">${avatar}</div><div class="lb-name">${escapeHtml(p.name)}${p.uid===state.player.uid?' (ржЖржкржирж┐)':''}</div><div class="lb-score">${toBn(p.score)}</div>`;
+    list.appendChild(item);
+  });
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+async function submitScore(){
+  try{
+    await fetch(`${API}/save-score`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:state.player.uid,name:state.player.name,emoji:state.player.emoji,picture:state.player.picture||null,score:state.score,correct:state.correct,total:state.total})});
+    lbCache={};
+  }catch(e){}
+}
+
+function showShare(){state.lastCorrect=state.correct||0;openShareCard();}
+function showShareFromGame(){closeOverlay('gameOverOverlay');openShareCard();}
+function openShareCard(){
+  const c=state.lastCorrect;const s=state.score;
+  $('shareScore').textContent=toBn(s)+' ржкржпрж╝рзЗржирзНржЯ';
+  $('shareText').textContent=`ржЖржорж┐ ${toBn(c)}/${toBn(state.total)} ржкрж╛рж░ржЫрж┐! рждрзБржорж┐ ржкрж╛рж░ржмрзЗ? ЁЯдФ`;
+  $('shareEmoji').textContent=c>=8?'ЁЯПЖ':c>=5?'ЁЯОЙ':'ЁЯТк';
+  if(navigator.share){$('nativeShareBtn').style.display='block';}else{$('nativeShareBtn').style.display='none';}
+  openOverlay('shareOverlay');
+}
+function closeShare(){closeOverlay('shareOverlay');}
+function buildShareUrl(){
+  const base=location.origin+location.pathname;
+  return `${base}?c=${state.player.uid}&s=${state.score}&n=${encodeURIComponent(state.player.name)}&e=${encodeURIComponent(state.player.emoji)}`;
+}
+function buildShareText(){return `ЁЯОп ржЗржорзЛржЬрж┐ ржзрж╛ржБржзрж╛ тАФ ржЖржорж┐ ${toBn(state.score)} ржкржпрж╝рзЗржирзНржЯ ржкрзЗржпрж╝рзЗржЫрж┐ (${toBn(state.lastCorrect)}/${toBn(state.total)})! рждрзБржорж┐ ржкрж╛рж░ржмрзЗ? ЁЯдФ`;}
+async function shareTo(platform){
+  const url=buildShareUrl();const text=buildShareText();const full=text+'\n'+url;
+  if(platform==='native'&&navigator.share){try{await navigator.share({title:'ржЗржорзЛржЬрж┐ ржзрж╛ржБржзрж╛',text,url});}catch(e){}return;}
+  if(platform==='facebook'){window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`,'_blank','noopener');}
+  else if(platform==='whatsapp'){window.open(`https://wa.me/?text=${encodeURIComponent(full)}`,'_blank','noopener');}
+  else if(platform==='telegram'){window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,'_blank','noopener');}
+  else if(platform==='instagram'){try{await navigator.clipboard.writeText(full);showToast('ЁЯУ╕ рж▓рж┐ржВржХ ржХржкрж┐! Instagram Story-рждрзЗ ржкрзЗрж╕рзНржЯ ржХрж░рзБржи');}catch(e){showToast('рж▓рж┐ржВржХ ржХржкрж┐ ржХрж░рзБржи: '+url);}}
+  else if(platform==='copy'){try{await navigator.clipboard.writeText(full);showToast('ЁЯФЧ рж▓рж┐ржВржХ ржХржкрж┐ рж╣ржпрж╝рзЗржЫрзЗ!');}catch(e){const t=document.createElement('textarea');t.value=full;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();showToast('ЁЯФЧ рж▓рж┐ржВржХ ржХржкрж┐ рж╣ржпрж╝рзЗржЫрзЗ!');}}
+}
+function showHowToPlay(){openOverlay('howToOverlay');}
+function closeHowTo(){closeOverlay('howToOverlay');}
+function showHome(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('active'));updateHomeInfo();showScreen('screen-home');}
+
+function parseChallenge(){
+  const p=new URLSearchParams(location.search);
+  const c=p.get('c'),s=p.get('s'),n=p.get('n'),e=p.get('e');
+  if(c&&s){
+    state.challenge={uid:c,score:parseInt(s),name:decodeURIComponent(n||'ржмржирзНржзрзБ'),emoji:decodeURIComponent(e||'ЁЯОп')};
+    const banner=$('challengeBanner');
+    banner.innerHTML=`<div class="challenge-banner">ЁЯОп ${escapeHtml(state.challenge.name)} ржЖржкржирж╛ржХрзЗ ржЪрзНржпрж╛рж▓рзЗржЮрзНржЬ ржХрж░рзЗржЫрзЗ!<br><span style="font-size:13px;opacity:.85">рждрж╛рж░ рж╕рзНржХрзЛрж░: ${toBn(state.challenge.score)} тАФ ржЖржкржирж┐ ржХрж┐ рж╣рж╛рж░рж╛рждрзЗ ржкрж╛рж░ржмрзЗржи?</span></div>`;
+  }
+}
+
+window.addEventListener('load',()=>{
+  loadProfile();updateHomeInfo();parseChallenge();
+  $('saveProfileBtn').onclick=saveProfileFromEdit;
+  if('serviceWorker' in navigator){navigator.serviceWorker.register('/service-worker.js').catch(()=>{});}
+});
+</script>
+</body>
+  </html>
+  
