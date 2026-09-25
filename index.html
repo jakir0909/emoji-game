@@ -190,6 +190,17 @@ body{font-family:'Hind Siliguri','Poppins',-apple-system,sans-serif;background:l
   </div>
 </div>
 
+<div class="overlay" id="noLivesOverlay">
+  <div class="popup">
+    <div style="font-size:52px">💔</div>
+    <h2>লাইফ শেষ!</h2>
+    <p>পরবর্তী ফ্রি লাইফ আসতে বাকি:</p>
+    <div class="big-score" id="waitTimerDisplay">৩:০০</div>
+    <button class="btn btn-gold" onclick="watchAdFromHome()">📺 অ্যাড দেখে ৩টি লাইফ নিন</button>
+    <button class="btn btn-outline" onclick="closeOverlay('noLivesOverlay')">পরে আসব</button>
+  </div>
+</div>
+
 <div class="screen" id="screen-leaderboard">
   <div class="lb-header">
     <h2>🏆 টপ ২০</h2>
@@ -235,7 +246,8 @@ body{font-family:'Hind Siliguri','Poppins',-apple-system,sans-serif;background:l
       <p>4️⃣ টানা সঠিক = 🔥 কম্বো বোনাস</p>
       <p>5️⃣ ৩টি লাইফ — ভুল করলে কমবে</p>
       <p>6️⃣ লাইফ শেষ হলে অ্যাড দেখে ফিরুন</p>
-      <p>7️⃣ টপ ২০ লিডারবোর্ডে নাম তুলুন 🏆</p>
+      <p>7️⃣ অ্যাড না দেখলে ৩ মিনিট অপেক্ষা</p>
+      <p>8️⃣ টপ ২০ লিডারবোর্ডে নাম তুলুন 🏆</p>
     </div>
     <button class="btn btn-primary" style="margin-top:16px" onclick="closeHowTo()">বুঝেছি! ✅</button>
   </div>
@@ -440,9 +452,118 @@ function saveProfileFromEdit(){
   saveProfile();closeEdit();showToast('✅ সেভ হয়েছে!');
 }
 
+/* ===== লাইফ কুলডাউন সিস্টেম ===== */
+const WAIT_TIME_MS = 3 * 60 * 1000; // ৩ মিনিট
+let waitTimerInterval = null;
+
+function getLivesState(){
+  let d;
+  try{ d = JSON.parse(localStorage.getItem('livesData')||'null'); }catch(e){ d=null; }
+  if(!d || typeof d.lives !== 'number') d = {lives:3, nextRefillAt:0};
+  if(d.lives <= 0 && d.nextRefillAt > 0 && Date.now() >= d.nextRefillAt){
+    d = {lives:3, nextRefillAt:0};
+    localStorage.setItem('livesData', JSON.stringify(d));
+  }
+  return d;
+}
+function saveLivesState(lives, nextRefillAt){
+  localStorage.setItem('livesData', JSON.stringify({lives:lives, nextRefillAt:nextRefillAt||0}));
+}
+function getWaitRemainingMs(){
+  const d = getLivesState();
+  if(d.lives > 0 || !d.nextRefillAt) return 0;
+  return Math.max(0, d.nextRefillAt - Date.now());
+}
+function showNoLivesPopup(){
+  openOverlay('noLivesOverlay');
+  updateWaitTimer();
+  clearInterval(waitTimerInterval);
+  waitTimerInterval = setInterval(function(){
+    const ms = getWaitRemainingMs();
+    if(ms <= 0){
+      clearInterval(waitTimerInterval);
+      closeOverlay('noLivesOverlay');
+      showToast('❤️ ৩টি লাইফ ফিরে এসেছে!');
+      updateHomeLivesBanner();
+      return;
+    }
+    updateWaitTimer();
+  }, 1000);
+}
+function updateWaitTimer(){
+  const ms = getWaitRemainingMs();
+  const totalSec = Math.ceil(ms/1000);
+  const min = Math.floor(totalSec/60);
+  const sec = totalSec % 60;
+  const el = $('waitTimerDisplay');
+  if(el) el.textContent = toBn(min+':'+(sec<10?'0':'')+sec);
+}
+function watchAdFromHome(){
+  closeOverlay('noLivesOverlay');
+  openOverlay('adOverlay');
+  let c = 5;
+  $('adTimer').textContent = toBn(c);
+  $('adSkipBtn').classList.remove('show');
+  const t = setInterval(function(){
+    c--;
+    $('adTimer').textContent = toBn(c);
+    if(c <= 0){ clearInterval(t); $('adSkipBtn').classList.add('show'); }
+  },1000);
+}
+function updateHomeLivesBanner(){
+  const d = getLivesState();
+  let banner = $('livesBanner');
+  if(!banner){
+    banner = document.createElement('div');
+    banner.id = 'livesBanner';
+    banner.style.cssText = 'background:rgba(255,255,255,.05);border-radius:12px;padding:10px;text-align:center;margin-bottom:10px;font-size:14px;font-weight:600;';
+    const profileCard = document.querySelector('#screen-home .profile-card');
+    if(profileCard) profileCard.parentNode.insertBefore(banner, profileCard);
+  }
+  if(d.lives > 0){
+    banner.innerHTML = '❤️ লাইফ: ' + toBn(d.lives) + '/৩';
+    banner.style.color = '#4CAF50';
+  } else {
+    const ms = getWaitRemainingMs();
+    const totalSec = Math.ceil(ms/1000);
+    const min = Math.floor(totalSec/60);
+    const sec = totalSec % 60;
+    banner.innerHTML = '⏳ পরবর্তী লাইফ: ' + toBn(min+':'+(sec<10?'0':'')+sec);
+    banner.style.color = '#FF6B6B';
+    clearInterval(waitTimerInterval);
+    waitTimerInterval = setInterval(function(){
+      const m = getWaitRemainingMs();
+      if(m <= 0){
+        clearInterval(waitTimerInterval);
+        updateHomeLivesBanner();
+        return;
+      }
+      const s = Math.ceil(m/1000);
+      const mm = Math.floor(s/60);
+      const ss = s % 60;
+      banner.innerHTML = '⏳ পরবর্তী লাইফ: ' + toBn(mm+':'+(ss<10?'0':'')+ss);
+    }, 1000);
+  }
+}
+
+/* ===== গেম ===== */
 function startGame(){
-  state.score=0;state.lives=3;state.qIndex=0;state.correct=0;state.combo=0;state.usedIdx=[];
-  updateLives();updateScore();showScreen('screen-game');nextQuestion();
+  const s = getLivesState();
+  if(s.lives <= 0){
+    showNoLivesPopup();
+    return;
+  }
+  state.score = 0;
+  state.lives = s.lives;
+  state.qIndex = 0;
+  state.correct = 0;
+  state.combo = 0;
+  state.usedIdx = [];
+  state.currentQ = null;
+  updateLives();
+  updateScore();
+  showScreen('screen-game');
+  nextQuestion();
 }
 function updateLives(){let h='';for(let i=0;i<state.maxLives;i++)h+=i<state.lives?'❤️':'<span class="lost">❤️</span>';$('livesDisplay').innerHTML=h;}
 function updateScore(){$('currentScore').textContent=toBn(state.score);$('progressFill').style.width=(state.qIndex/state.total*100)+'%';$('qCounter').textContent=toBn(Math.min(state.qIndex+1,state.total))+'/'+toBn(state.total);}
@@ -495,13 +616,29 @@ function selectAnswer(idx,btn){
 function showCombo(txt){const b=$('comboBadge');b.textContent=txt;b.style.display='block';setTimeout(()=>b.style.display='none',1000);}
 function loseLife(){state.lives--;updateLives();if(state.lives<=0)setTimeout(()=>endGame(false),1200);else setTimeout(nextQuestion,1200);}
 function endGame(completed){
-  clearInterval(state.timer);state.lastCorrect=state.correct;saveHistory(state.score);submitScore();
+  clearInterval(state.timer);
+  state.lastCorrect=state.correct;
+  saveHistory(state.score);
+  submitScore();
+
+  // লাইফ কুলডাউন সেভ
+  if(state.lives <= 0){
+    let d = getLivesState();
+    if(!d.nextRefillAt || Date.now() >= d.nextRefillAt){
+      d.nextRefillAt = Date.now() + WAIT_TIME_MS;
+    }
+    d.lives = 0;
+    saveLivesState(0, d.nextRefillAt);
+  } else {
+    saveLivesState(state.lives, 0);
+  }
+
   const emoji=completed?(state.correct>=8?'🏆':'🎉'):'😢';
   const title=completed?'দুর্দান্ত!':'লাইফ শেষ!';
   const msg=completed?('তুমি '+toBn(state.correct)+'/'+toBn(state.total)+' সঠিক!'):'চিন্তা নেই! অ্যাড দেখে আবার শুরু করুন';
   $('gameOverEmoji').textContent=emoji;$('gameOverTitle').textContent=title;
   $('finalScoreDisplay').textContent=toBn(state.score);$('gameOverMsg').textContent=msg;
-  openOverlay('gameOverOverlay');updateHomeInfo();
+  openOverlay('gameOverOverlay');updateHomeInfo();updateHomeLivesBanner();
 }
 function watchAdForLives(){
   closeOverlay('gameOverOverlay');openOverlay('adOverlay');
@@ -509,8 +646,22 @@ function watchAdForLives(){
   const t=setInterval(()=>{c--;$('adTimer').textContent=toBn(c);if(c<=0){clearInterval(t);$('adSkipBtn').classList.add('show');}},1000);
 }
 function finishAd(){
-  closeOverlay('adOverlay');state.lives=state.maxLives;updateLives();showToast('❤️ ৩টি লাইফ পেয়েছেন!');
-  if(state.qIndex>=state.total)endGame(true);else{showScreen('screen-game');nextQuestion();}
+  closeOverlay('adOverlay');
+  // ৩টি ফ্রেশ লাইফ
+  saveLivesState(3, 0);
+  state.lives = 3;
+  updateLives();
+  showToast('❤️ ৩টি লাইফ পেয়েছেন!');
+  updateHomeLivesBanner();
+
+  if(state.qIndex >= state.total){
+    endGame(true);
+  } else if(state.currentQ === null){
+    startGame();
+  } else {
+    showScreen('screen-game');
+    nextQuestion();
+  }
 }
 
 let lbCache={};
@@ -592,7 +743,13 @@ async function shareTo(platform){
 }
 function showHowToPlay(){openOverlay('howToOverlay');}
 function closeHowTo(){closeOverlay('howToOverlay');}
-function showHome(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('active'));updateHomeInfo();showScreen('screen-home');}
+function showHome(){
+  document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('active'));
+  clearInterval(waitTimerInterval);
+  updateHomeInfo();
+  updateHomeLivesBanner();
+  showScreen('screen-home');
+}
 
 function parseChallenge(){
   const p=new URLSearchParams(location.search);
@@ -605,7 +762,10 @@ function parseChallenge(){
 }
 
 window.addEventListener('load',()=>{
-  loadProfile();updateHomeInfo();parseChallenge();
+  loadProfile();
+  updateHomeInfo();
+  parseChallenge();
+  updateHomeLivesBanner();
   $('saveProfileBtn').onclick=saveProfileFromEdit;
   if('serviceWorker' in navigator){navigator.serviceWorker.register('/service-worker.js').catch(()=>{});}
 });
